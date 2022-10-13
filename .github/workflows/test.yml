@@ -1,0 +1,25 @@
+name: Test Bazel Targets
+on: 
+  push:
+    branches:    
+      - main
+  pull_request:
+    branches:    
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bazelbuild/setup-bazelisk@v1
+      - name: Mount bazel cache  # Optional
+        uses: actions/cache@v2
+        with:
+          path: "~/.cache/bazel"
+          key: bazel
+      - name: Run tests
+        run: |
+          bazel test //... \
+            --sandbox_debug
+
+
