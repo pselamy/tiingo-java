@@ -8,7 +8,6 @@ import com.google.gson.TypeAdapter;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
-
 import java.lang.reflect.Type;
 import java.net.URI;
 

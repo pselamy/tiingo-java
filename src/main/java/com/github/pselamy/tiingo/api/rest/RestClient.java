@@ -7,10 +7,9 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.net.URI;
+import org.jetbrains.annotations.NotNull;
 
 /** REST client for Tiingo API. */
 @AutoValue
