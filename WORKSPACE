@@ -32,6 +32,7 @@ maven_install(
     artifacts = [
         "com.google.auto.value:auto-value:1.10",
         "com.google.auto.value:auto-value-annotations:1.10",
+        "com.google.guava:guava:31.1-jre",
         "com.google.code.gson:gson:2.9.1",
         "com.google.http-client:google-http-client:1.42.2",
         "com.google.inject:guice:5.1.0",
@@ -45,7 +46,6 @@ maven_install(
 
 #maven_install(
 #    artifacts = [
-#        #        "com.google.guava:guava:31.1-jre",
 #        #        "com.ryanharter.auto.value:auto-value-gson:1.3.1",
 #        #        "com.ryanharter.auto.value:auto-value-gson-annotations:0.8.0",
 #        #        "com.ryanharter.auto.value:auto-value-gson-factory:1.3.1",
