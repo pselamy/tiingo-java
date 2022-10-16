@@ -7,6 +7,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URI;
@@ -16,7 +17,7 @@ import java.net.URI;
 public abstract class RestClient {
   static Builder builder() {
     return new AutoValue_RestClient.Builder()
-        .setBasePath(URI.create("https://api.tiingo.com"))
+        .setBasePath(URI.create("https://api.tiingo.com/"))
         .setRequestFactory(new NetHttpTransport().createRequestFactory());
   }
 
@@ -41,7 +42,7 @@ public abstract class RestClient {
   }
 
   private <T> GenericUrl createGenericUrl(GetParams<T> getParams) {
-    URI uri = basePath().resolve(getParams.resource());
+    URI uri = createUri(getParams);
     GenericUrl genericUrl = new GenericUrl(uri);
     genericUrl.putAll(getParams.queryParams());
     return genericUrl;
@@ -51,6 +52,21 @@ public abstract class RestClient {
     HttpHeaders headers = new HttpHeaders();
     getParams.headers().forEach(headers::set);
     return headers;
+  }
+
+  @NotNull
+  private <T> URI createUri(GetParams<T> getParams) {
+    String basePath = basePath().toString();
+    String resource = getParams.resource();
+    if (!basePath.endsWith("/")) {
+      basePath += "/";
+    }
+
+    if (resource.startsWith("/")) {
+      resource = resource.substring(1);
+    }
+
+    return URI.create(basePath).resolve(resource);
   }
 
   @AutoValue.Builder

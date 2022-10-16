@@ -9,7 +9,6 @@ import com.google.api.client.testing.http.MockHttpTransport;
 import com.google.api.client.testing.http.MockLowLevelHttpRequest;
 import com.google.api.client.testing.http.MockLowLevelHttpResponse;
 import com.google.auto.value.AutoValue;
-import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,8 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Optional;
-import java.util.function.Supplier;
+import java.net.URI;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -33,6 +31,33 @@ public class RestClientTest {
   @Before
   public void setUp() {
     this.gson = new GsonBuilder().registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY).create();
+  }
+
+  @Test
+  public void get_formsCorrectUrl(@TestParameter GetFormsCorrectUrlTestCase testCase)
+      throws RestClientException {
+    // Arrange
+    FakeHttpRequestTransport requestTransport = FakeHttpRequestTransport.create(testCase.response);
+    HttpRequestFactory requestFactory = requestTransport.createRequestFactory();
+    URI basePath = URI.create(testCase.baseUrl);
+    RestClient restClient =
+        RestClient.builder()
+            .setBasePath(basePath)
+            .setGson(gson)
+            .setRequestFactory(requestFactory)
+            .build();
+    RestClient.GetParams<FakeResponse> getParams =
+        RestClient.GetParams.<FakeResponse>builder()
+            .setResource(testCase.resource)
+            .setResponseType(FakeResponse.class)
+            .build();
+
+    // Act
+    restClient.get(getParams);
+    ImmutableMap<String, String> actual = requestTransport.requests().build();
+
+    // Assert
+    assertThat(actual).isEqualTo(testCase.expectedRequests);
   }
 
   @Test
@@ -74,6 +99,46 @@ public class RestClientTest {
     assertThrows(RestClientException.class, () -> restClient.get(getParams));
   }
 
+  enum GetFormsCorrectUrlTestCase {
+    SIMPLE(
+        "http://website.com/",
+        "resource",
+        new MockLowLevelHttpResponse().setContent("{\"value1\":\"value1\",\"value2\":\"value2\"}"),
+        ImmutableMap.of("GET", "http://website.com/resource")),
+    NO_TRAILING_SLASH(
+        "http://website.com",
+        "resource",
+        new MockLowLevelHttpResponse().setContent("{\"value1\":\"value1\",\"value2\":\"value2\"}"),
+        ImmutableMap.of("GET", "http://website.com/resource")),
+    TRAILING_SLASH_AND_LEADING_SLASH(
+        "http://website.com/",
+        "/resource",
+        new MockLowLevelHttpResponse().setContent("{\"value1\":\"value1\",\"value2\":\"value2\"}"),
+        ImmutableMap.of("GET", "http://website.com/resource")),
+    LEADING_SLASH(
+        "http://website.com",
+        "/resource",
+        new MockLowLevelHttpResponse().setContent("{\"value1\":\"value1\",\"value2\":\"value2\"}"),
+        ImmutableMap.of("GET", "http://website.com/resource"));
+
+    private final String baseUrl;
+
+    private final String resource;
+    private final MockLowLevelHttpResponse response;
+    private final ImmutableMap<String, String> expectedRequests;
+
+    GetFormsCorrectUrlTestCase(
+        String baseUrl,
+        String resource,
+        MockLowLevelHttpResponse response,
+        ImmutableMap<String, String> expectedRequests) {
+      this.baseUrl = baseUrl;
+      this.resource = resource;
+      this.response = response;
+      this.expectedRequests = expectedRequests;
+    }
+  }
+
   enum GetReturnsExpectedResultTestCase {
     SUCCESS_1(
         "resource-1",
@@ -111,26 +176,21 @@ public class RestClientTest {
             .addHeader("custom_header", "value")
             .setStatusCode(404)
             .setContentType(Json.MEDIA_TYPE)
-            .setContent("{\"error\":\"not found\"}"),
-        null),
+            .setContent("{\"error\":\"not found\"}")),
     INTERNAL_SERVER_ERROR(
         "resource-4",
         new MockLowLevelHttpResponse()
             .addHeader("custom_header", "value")
             .setStatusCode(500)
             .setContentType(Json.MEDIA_TYPE)
-            .setContent("{\"error\":\"internal server error\"}"),
-        null);
+            .setContent("{\"error\":\"internal server error\"}"));
 
     private final String resource;
     private final LowLevelHttpResponse response;
-    private final Supplier<Optional<FakeResponse>> expectedResult;
 
-    GetThrowsRestClientExceptionTestCase(
-        String resource, LowLevelHttpResponse response, FakeResponse expectedResult) {
+    GetThrowsRestClientExceptionTestCase(String resource, LowLevelHttpResponse response) {
       this.resource = resource;
       this.response = response;
-      this.expectedResult = Suppliers.ofInstance(Optional.ofNullable(expectedResult));
     }
   }
 
