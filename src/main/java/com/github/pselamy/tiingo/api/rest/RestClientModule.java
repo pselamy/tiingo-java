@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -15,6 +16,10 @@ import java.net.URI;
 public abstract class RestClientModule extends AbstractModule {
   public static Builder builder() {
     return new AutoValue_RestClientModule.Builder();
+  }
+
+  public static RestClientModule create() {
+    return builder().build();
   }
 
   abstract ImmutableMap<Type, TypeAdapter<?>> typeAdapters();
@@ -26,9 +31,8 @@ public abstract class RestClientModule extends AbstractModule {
 
   @Provides
   Gson providesGson() {
-    GsonBuilder gsonBuilder =
-        new GsonBuilder();
-//    gsonBuilder.registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY);
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY);
     typeAdapters().forEach(gsonBuilder::registerTypeAdapter);
     return gsonBuilder.create();
   }

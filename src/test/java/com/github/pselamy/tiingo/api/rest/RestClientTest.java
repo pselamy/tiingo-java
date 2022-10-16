@@ -11,7 +11,7 @@ import com.google.api.client.testing.http.MockLowLevelHttpResponse;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.inject.Guice;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.inject.Inject;
 import java.net.URI;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -26,11 +27,11 @@ import static org.junit.Assert.assertThrows;
 
 @RunWith(TestParameterInjector.class)
 public class RestClientTest {
-  private Gson gson;
+  @Inject private Gson gson;
 
   @Before
   public void setUp() {
-    this.gson = new GsonBuilder().registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY).create();
+    Guice.createInjector(RestClientModule.builder().build()).injectMembers(this);
   }
 
   @Test
