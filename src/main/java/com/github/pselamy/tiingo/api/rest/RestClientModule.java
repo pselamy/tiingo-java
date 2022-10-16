@@ -27,7 +27,8 @@ public abstract class RestClientModule extends AbstractModule {
   @Provides
   Gson providesGson() {
     GsonBuilder gsonBuilder =
-        new GsonBuilder().registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY);
+        new GsonBuilder();
+//    gsonBuilder.registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY);
     typeAdapters().forEach(gsonBuilder::registerTypeAdapter);
     return gsonBuilder.create();
   }

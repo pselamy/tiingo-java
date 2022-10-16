@@ -6,7 +6,7 @@ java_library(
         "//src/test/java/com/github/pselamy/tiingo:__subpackages__",
     ],
     deps = [
-        "@autovalue_bazel//:autovalue",
+        "//:autovalue",
         "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_http_client_google_http_client",
@@ -18,10 +18,9 @@ java_binary(
     srcs = ["RestClientModule.java"],
     deps = [
         ":rest_client",
-        "@autovalue_bazel//:autovalue",
+        "//:autovalue",
         "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_inject_guice",
-        "@maven//:com_ryanharter_auto_value_auto_value_gson",
     ],
 )
