@@ -38,19 +38,11 @@ maven_install(
         "com.google.inject:guice:5.1.0",
         "com.google.testparameterinjector:test-parameter-injector:1.9",
         "com.google.truth:truth:1.1.3",
+        "com.ryanharter.auto.value:auto-value-gson:1.3.1",
+        "com.ryanharter.auto.value:auto-value-gson-annotations:0.8.0",
+        "com.ryanharter.auto.value:auto-value-gson-factory:1.3.1",
     ],
     repositories = [
         "https://repo1.maven.org/maven2",
     ],
 )
-
-#maven_install(
-#    artifacts = [
-#        #        "com.ryanharter.auto.value:auto-value-gson:1.3.1",
-#        #        "com.ryanharter.auto.value:auto-value-gson-annotations:0.8.0",
-#        #        "com.ryanharter.auto.value:auto-value-gson-factory:1.3.1",
-#    ],
-#    repositories = [
-#        "https://repo1.maven.org/maven2",
-#    ],
-#)
