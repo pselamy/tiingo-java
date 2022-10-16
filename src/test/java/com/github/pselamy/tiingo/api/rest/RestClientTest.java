@@ -2,41 +2,170 @@ package com.github.pselamy.tiingo.api.rest;
 
 import com.github.pselamy.tiingo.api.rest.RestClient.RestClientException;
 import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.LowLevelHttpRequest;
+import com.google.api.client.http.LowLevelHttpResponse;
+import com.google.api.client.json.Json;
+import com.google.api.client.testing.http.MockHttpTransport;
+import com.google.api.client.testing.http.MockLowLevelHttpRequest;
+import com.google.api.client.testing.http.MockLowLevelHttpResponse;
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertThrows;
+
 @RunWith(TestParameterInjector.class)
 public class RestClientTest {
-  private static final String BASE_PATH = "https://api.tiingo.com";
-
   private Gson gson;
 
-  private HttpRequestFactory requestFactory;
-
   @Before
-  public void setUp() throws Exception {}
+  public void setUp() {
+    this.gson = new GsonBuilder().registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY).create();
+  }
 
   @Test
-  public void get_returnsExpectedResult() throws RestClientException {
+  public void get_returnsExpectedResult(@TestParameter GetReturnsExpectedResultTestCase testCase)
+      throws RestClientException {
     // Arrange
+    HttpRequestFactory requestFactory =
+        FakeHttpRequestTransport.create(testCase.response).createRequestFactory();
     RestClient restClient =
         RestClient.builder().setGson(gson).setRequestFactory(requestFactory).build();
     RestClient.GetParams<FakeResponse> getParams =
-        RestClient.GetParams.<FakeResponse>builder().setResponseType(FakeResponse.class).build();
+        RestClient.GetParams.<FakeResponse>builder()
+            .setResource(testCase.resource)
+            .setResponseType(FakeResponse.class)
+            .build();
 
     // Act
     FakeResponse actual = restClient.get(getParams);
+
+    // Assert
+    assertThat(actual).isEqualTo(testCase.expectedResult);
+  }
+
+  @Test
+  public void get_throwsRestClientException(
+      @TestParameter GetThrowsRestClientExceptionTestCase testCase) throws RestClientException {
+    // Arrange
+    HttpRequestFactory requestFactory =
+        FakeHttpRequestTransport.create(testCase.response).createRequestFactory();
+    RestClient restClient =
+        RestClient.builder().setGson(gson).setRequestFactory(requestFactory).build();
+    RestClient.GetParams<FakeResponse> getParams =
+        RestClient.GetParams.<FakeResponse>builder()
+            .setResource(testCase.resource)
+            .setResponseType(FakeResponse.class)
+            .build();
+
+    // Act / Assert
+    assertThrows(RestClientException.class, () -> restClient.get(getParams));
+  }
+
+  enum GetReturnsExpectedResultTestCase {
+    SUCCESS_1(
+        "resource-1",
+        new MockLowLevelHttpResponse()
+            .addHeader("custom_header", "value")
+            .setStatusCode(200)
+            .setContentType(Json.MEDIA_TYPE)
+            .setContent("{\"value1\":\"value1\",\"value2\":\"value2\"}"),
+        FakeResponse.create("value1", "value2")),
+    SUCCESS_2(
+        "resource-2",
+        new MockLowLevelHttpResponse()
+            .addHeader("custom_header", "value")
+            .setStatusCode(200)
+            .setContentType(Json.MEDIA_TYPE)
+            .setContent("{\"value1\":\"value-one\",\"value2\":\"value-two\"}"),
+        FakeResponse.create("value-one", "value-two"));
+
+    private final String resource;
+    private final LowLevelHttpResponse response;
+    private final FakeResponse expectedResult;
+
+    GetReturnsExpectedResultTestCase(
+        String resource, LowLevelHttpResponse response, FakeResponse expectedResult) {
+      this.resource = resource;
+      this.response = response;
+      this.expectedResult = expectedResult;
+    }
+  }
+
+  enum GetThrowsRestClientExceptionTestCase {
+    NOT_FOUND(
+        "resource-3",
+        new MockLowLevelHttpResponse()
+            .addHeader("custom_header", "value")
+            .setStatusCode(404)
+            .setContentType(Json.MEDIA_TYPE)
+            .setContent("{\"error\":\"not found\"}"),
+        null),
+    INTERNAL_SERVER_ERROR(
+        "resource-4",
+        new MockLowLevelHttpResponse()
+            .addHeader("custom_header", "value")
+            .setStatusCode(500)
+            .setContentType(Json.MEDIA_TYPE)
+            .setContent("{\"error\":\"internal server error\"}"),
+        null);
+
+    private final String resource;
+    private final LowLevelHttpResponse response;
+    private final Supplier<Optional<FakeResponse>> expectedResult;
+
+    GetThrowsRestClientExceptionTestCase(
+        String resource, LowLevelHttpResponse response, FakeResponse expectedResult) {
+      this.resource = resource;
+      this.response = response;
+      this.expectedResult = Suppliers.ofInstance(Optional.ofNullable(expectedResult));
+    }
   }
 
   @AutoValue
-//  @GenerateTypeAdapter
-  abstract static class FakeResponse {
-    abstract String field1();
+  abstract static class FakeHttpRequestTransport extends MockHttpTransport {
+    static FakeHttpRequestTransport create(LowLevelHttpResponse response) {
+      return new AutoValue_RestClientTest_FakeHttpRequestTransport(
+          ImmutableMap.builder(), response);
+    }
 
-    abstract String field2();
+    abstract ImmutableMap.Builder<String, String> requests();
+
+    abstract LowLevelHttpResponse response();
+
+    @Override
+    public LowLevelHttpRequest buildRequest(String method, String url) {
+      requests().put(method, url);
+      return new MockLowLevelHttpRequest() {
+        @Override
+        public LowLevelHttpResponse execute() {
+          return response();
+        }
+      };
+    }
+  }
+
+  @AutoValue
+  @GenerateTypeAdapter
+  abstract static class FakeResponse {
+    static FakeResponse create(String value1, String value2) {
+      return new AutoValue_RestClientTest_FakeResponse(value1, value2);
+    }
+
+    abstract String value1();
+
+    abstract String value2();
   }
 }
