@@ -1,6 +1,7 @@
 package com.github.pselamy.tiingo.api.rest;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.auto.value.AutoValue;
@@ -27,13 +28,29 @@ public abstract class RestClient {
 
   <T> T get(GetParams<T> getParams) throws RestClientException {
     try {
-      URI uri = basePath().resolve(getParams.resource());
-      GenericUrl genericUrl = new GenericUrl(uri);
-      String response = requestFactory().buildGetRequest(genericUrl).execute().parseAsString();
+      String response =
+          requestFactory()
+              .buildGetRequest(createGenericUrl(getParams))
+              .setHeaders(createHttpHeaders(getParams))
+              .execute()
+              .parseAsString();
       return gson().fromJson(response, getParams.responseType());
     } catch (IOException e) {
       throw new RestClientException(e);
     }
+  }
+
+  private <T> GenericUrl createGenericUrl(GetParams<T> getParams) {
+    URI uri = basePath().resolve(getParams.resource());
+    GenericUrl genericUrl = new GenericUrl(uri);
+    genericUrl.putAll(getParams.queryParams());
+    return genericUrl;
+  }
+
+  private <T> HttpHeaders createHttpHeaders(GetParams<T> getParams) {
+    HttpHeaders headers = new HttpHeaders();
+    getParams.headers().forEach(headers::set);
+    return headers;
   }
 
   @AutoValue.Builder
