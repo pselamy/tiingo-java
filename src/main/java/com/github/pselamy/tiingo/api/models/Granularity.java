@@ -21,4 +21,8 @@ public enum Granularity {
   public Duration duration() {
     return Duration.ofSeconds(seconds);
   }
+
+  public int minutes() {
+    return seconds / 60;
+  }
 }
