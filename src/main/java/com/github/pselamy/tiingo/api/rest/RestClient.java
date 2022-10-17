@@ -3,7 +3,6 @@ package com.github.pselamy.tiingo.api.rest;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -15,10 +14,8 @@ import java.net.URI;
 /** REST client for Tiingo API. */
 @AutoValue
 public abstract class RestClient {
-  static Builder builder() {
-    return new AutoValue_RestClient.Builder()
-        .setBasePath(URI.create("https://api.tiingo.com/"))
-        .setRequestFactory(new NetHttpTransport().createRequestFactory());
+  public static Builder builder() {
+    return new AutoValue_RestClient.Builder();
   }
 
   abstract Gson gson();
@@ -117,7 +114,7 @@ public abstract class RestClient {
     }
   }
 
-  static class RestClientException extends RuntimeException {
+  public static class RestClientException extends RuntimeException {
     RestClientException(Throwable cause) {
       super(cause);
     }

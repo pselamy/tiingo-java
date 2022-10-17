@@ -1,39 +1,38 @@
 package com.github.pselamy.tiingo.api.rest;
 
+import com.github.pselamy.tiingo.api.models.GsonModule;
+import com.github.pselamy.tiingo.api.models.GsonModule.Adapter;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
-import java.lang.reflect.Type;
+
 import java.net.URI;
 
 @AutoValue
 public abstract class RestClientModule extends AbstractModule {
   public static Builder builder() {
-    return new AutoValue_RestClientModule.Builder();
+    return new AutoValue_RestClientModule.Builder()
+        .requestFactory(new NetHttpTransport().createRequestFactory());
   }
 
   public static RestClientModule create() {
     return builder().build();
   }
 
-  abstract ImmutableMap<Type, TypeAdapter<?>> typeAdapters();
+  abstract ImmutableList<Adapter<?>> adapters();
+
+  abstract HttpRequestFactory requestFactory();
 
   @Override
   protected void configure() {
-    super.configure();
-  }
+    GsonModule.Builder gsonModuleBuilder = GsonModule.builder();
+    adapters().forEach(gsonModuleBuilder::addAdapter);
 
-  @Provides
-  Gson providesGson() {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapterFactory(GenerateTypeAdapter.FACTORY);
-    typeAdapters().forEach(gsonBuilder::registerTypeAdapter);
-    return gsonBuilder.create();
+    install(gsonModuleBuilder.build());
   }
 
   @Provides
@@ -41,23 +40,20 @@ public abstract class RestClientModule extends AbstractModule {
     return RestClient.builder()
         .setGson(gson)
         .setBasePath(URI.create("https://api.tiingo.com"))
+        .setRequestFactory(requestFactory())
         .build();
-  }
-
-  interface Adapter<T> {
-    Class<T> type();
-
-    TypeAdapter<T> typeAdapter();
   }
 
   @AutoValue.Builder
   public abstract static class Builder {
-    abstract ImmutableMap.Builder<Type, TypeAdapter<?>> typeAdaptersBuilder();
+    abstract ImmutableList.Builder<Adapter<?>> adaptersBuilder();
 
     public Builder addAdapter(Adapter<?> adapter) {
-      typeAdaptersBuilder().put(adapter.type(), adapter.typeAdapter());
+      adaptersBuilder().add(adapter);
       return this;
     }
+
+    public abstract Builder requestFactory(HttpRequestFactory requestFactory);
 
     public abstract RestClientModule build();
   }

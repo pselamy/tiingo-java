@@ -1,28 +1,27 @@
 package com.github.pselamy.tiingo.api.rest;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertThrows;
-
 import com.github.pselamy.tiingo.api.rest.RestClient.RestClientException;
+import com.github.pselamy.tiingo.api.testing.FakeHttpRequestTransport;
 import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.http.LowLevelHttpResponse;
 import com.google.api.client.json.Json;
-import com.google.api.client.testing.http.MockHttpTransport;
-import com.google.api.client.testing.http.MockLowLevelHttpRequest;
 import com.google.api.client.testing.http.MockLowLevelHttpResponse;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
-import java.net.URI;
-import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.net.URI;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertThrows;
 
 @RunWith(TestParameterInjector.class)
 public class RestClientTest {
@@ -67,7 +66,11 @@ public class RestClientTest {
     HttpRequestFactory requestFactory =
         FakeHttpRequestTransport.create(testCase.response).createRequestFactory();
     RestClient restClient =
-        RestClient.builder().setGson(gson).setRequestFactory(requestFactory).build();
+        RestClient.builder()
+            .setBasePath(URI.create("http://website.com"))
+            .setGson(gson)
+            .setRequestFactory(requestFactory)
+            .build();
     RestClient.GetParams<FakeResponse> getParams =
         RestClient.GetParams.<FakeResponse>builder()
             .setResource(testCase.resource)
@@ -88,7 +91,11 @@ public class RestClientTest {
     HttpRequestFactory requestFactory =
         FakeHttpRequestTransport.create(testCase.response).createRequestFactory();
     RestClient restClient =
-        RestClient.builder().setGson(gson).setRequestFactory(requestFactory).build();
+        RestClient.builder()
+            .setBasePath(URI.create("http://website.com"))
+            .setGson(gson)
+            .setRequestFactory(requestFactory)
+            .build();
     RestClient.GetParams<FakeResponse> getParams =
         RestClient.GetParams.<FakeResponse>builder()
             .setResource(testCase.resource)
@@ -195,32 +202,9 @@ public class RestClientTest {
   }
 
   @AutoValue
-  abstract static class FakeHttpRequestTransport extends MockHttpTransport {
-    static FakeHttpRequestTransport create(LowLevelHttpResponse response) {
-      return new AutoValue_RestClientTest_FakeHttpRequestTransport(
-          ImmutableMap.builder(), response);
-    }
-
-    abstract ImmutableMap.Builder<String, String> requests();
-
-    abstract LowLevelHttpResponse response();
-
-    @Override
-    public LowLevelHttpRequest buildRequest(String method, String url) {
-      requests().put(method, url);
-      return new MockLowLevelHttpRequest() {
-        @Override
-        public LowLevelHttpResponse execute() {
-          return response();
-        }
-      };
-    }
-  }
-
-  @AutoValue
   @GenerateTypeAdapter
-  abstract static class FakeResponse {
-    static FakeResponse create(String value1, String value2) {
+  public abstract static class FakeResponse {
+    private static FakeResponse create(String value1, String value2) {
       return new AutoValue_RestClientTest_FakeResponse(value1, value2);
     }
 

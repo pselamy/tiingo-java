@@ -41,3 +41,19 @@ java_library(
     name = "granularity",
     srcs = ["Granularity.java"],
 )
+
+java_library(
+    name = "gson_module",
+    srcs = ["GsonModule.java"],
+    visibility = [
+        "//src/main/java/com/github/pselamy/tiingo:__subpackages__",
+        "//src/test/java/com/github/pselamy/tiingo:__subpackages__",
+    ],
+    deps = [
+        "//:autovalue",
+        "//:autovalue_gson",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_inject_guice",
+    ],
+)
