@@ -38,6 +38,7 @@ java_library(
     deps = [
         ":candle_service",
         ":crypto_candle_service",
+        "//src/main/java/com/github/pselamy/tiingo/api/models:asset_type",
         "//src/main/java/com/github/pselamy/tiingo/api/rest:rest_client_module",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_inject_guice",
