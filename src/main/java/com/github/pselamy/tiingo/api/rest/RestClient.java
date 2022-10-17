@@ -7,9 +7,10 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
-import org.jetbrains.annotations.NotNull;
 
 /** REST client for Tiingo API. */
 @AutoValue
@@ -26,7 +27,7 @@ public abstract class RestClient {
 
   abstract URI basePath();
 
-  <T> T get(GetParams<T> getParams) throws RestClientException {
+  public <T> T get(GetParams<T> getParams) throws RestClientException {
     try {
       String response =
           requestFactory()
@@ -53,7 +54,6 @@ public abstract class RestClient {
     return headers;
   }
 
-  @NotNull
   private <T> URI createUri(GetParams<T> getParams) {
     String basePath = basePath().toString();
     String resource = getParams.resource();
@@ -91,7 +91,7 @@ public abstract class RestClient {
 
     abstract ImmutableMap<String, String> queryParams();
 
-    abstract Class<T> responseType();
+    abstract Type responseType();
 
     @AutoValue.Builder
     public abstract static class Builder<T> {
@@ -104,14 +104,14 @@ public abstract class RestClient {
         return this;
       }
 
-      public Builder<T> addQueryParam(String key, String value) {
+      public Builder<T> addParam(String key, String value) {
         queryParamsBuilder().put(key, value);
         return this;
       }
 
       public abstract Builder<T> setResource(String resource);
 
-      public abstract Builder<T> setResponseType(Class<T> responseType);
+      public abstract Builder<T> setResponseType(Type responseType);
 
       public abstract GetParams<T> build();
     }
