@@ -22,5 +22,22 @@ java_library(
     srcs = ["Candle.java"],
     deps = [
         "//:autovalue",
+        "//:autovalue_gson",
     ],
+)
+
+java_library(
+    name = "candle_response",
+    srcs = ["CandleResponse.java"],
+    deps = [
+        ":candle",
+        "//:autovalue",
+        "//:autovalue_gson",
+        "@maven//:com_google_guava_guava",
+    ],
+)
+
+java_library(
+    name = "granularity",
+    srcs = ["Granularity.java"],
 )

@@ -1,10 +1,12 @@
 package com.github.pselamy.tiingo.api.models;
 
 import com.google.auto.value.AutoValue;
+import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 
 import java.math.BigDecimal;
 
 @AutoValue
+@GenerateTypeAdapter
 public abstract class Candle {
   public static Builder builder() {
     return new AutoValue_Candle.Builder();
