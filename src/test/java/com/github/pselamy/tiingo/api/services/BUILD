@@ -1,0 +1,19 @@
+java_test(
+    name = "CryptoCandleServiceTest",
+    srcs = ["CryptoCandleServiceTest.java"],
+    deps = [
+        "//src/main/java/com/github/pselamy/tiingo/api/models:api_key",
+        "//src/main/java/com/github/pselamy/tiingo/api/models:candle",
+        "//src/main/java/com/github/pselamy/tiingo/api/models:candle_response",
+        "//src/main/java/com/github/pselamy/tiingo/api/models:granularity",
+        "//src/main/java/com/github/pselamy/tiingo/api/rest:rest_client",
+        "//src/main/java/com/github/pselamy/tiingo/api/rest:rest_client_module",
+        "//src/main/java/com/github/pselamy/tiingo/api/services:candle_service",
+        "//src/main/java/com/github/pselamy/tiingo/api/services:crypto_candle_service",
+        "@maven//:com_google_inject_extensions_guice_testlib",
+        "@maven//:com_google_inject_guice",
+        "@maven//:com_google_testparameterinjector_test_parameter_injector",
+        "@maven//:com_google_truth_truth",
+        "@maven//:com_ryanharter_auto_value_auto_value_gson_factory",
+    ],
+)
