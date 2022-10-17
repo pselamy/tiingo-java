@@ -6,7 +6,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;

@@ -1,5 +1,7 @@
 package com.github.pselamy.tiingo.api.services;
 
+import static com.google.common.truth.Truth.assertThat;
+
 import com.github.pselamy.tiingo.api.models.ApiKey;
 import com.github.pselamy.tiingo.api.models.CandleResponse;
 import com.github.pselamy.tiingo.api.models.Granularity;
@@ -18,14 +20,11 @@ import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import java.time.Instant;
+import java.util.function.Supplier;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.time.Instant;
-import java.util.function.Supplier;
-
-import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(TestParameterInjector.class)
 public class CryptoCandleServiceTest {

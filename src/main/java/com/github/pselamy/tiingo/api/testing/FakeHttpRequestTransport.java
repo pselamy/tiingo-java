@@ -7,7 +7,6 @@ import com.google.api.client.testing.http.MockLowLevelHttpRequest;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
-
 import java.util.function.Supplier;
 
 @AutoValue

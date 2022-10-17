@@ -3,7 +3,6 @@ package com.github.pselamy.tiingo.api.models;
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
-
 import java.util.ArrayList;
 import java.util.Collection;
 

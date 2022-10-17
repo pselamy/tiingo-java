@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-
 import java.net.URI;
 
 @AutoValue

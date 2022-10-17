@@ -1,5 +1,8 @@
 package com.github.pselamy.tiingo.api.rest;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertThrows;
+
 import com.github.pselamy.tiingo.api.rest.RestClient.RestClientException;
 import com.github.pselamy.tiingo.api.testing.FakeHttpRequestTransport;
 import com.google.api.client.http.HttpRequestFactory;
@@ -14,14 +17,10 @@ import com.google.inject.Inject;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
+import java.net.URI;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.net.URI;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertThrows;
 
 @RunWith(TestParameterInjector.class)
 public class RestClientTest {

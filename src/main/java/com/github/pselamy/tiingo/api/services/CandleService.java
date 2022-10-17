@@ -6,7 +6,6 @@ import com.github.pselamy.tiingo.api.models.Granularity;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
-
 import java.time.Instant;
 import java.util.Optional;
 

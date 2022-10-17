@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.multibindings.Multibinder;
-
 import java.util.Set;
 
 public class ServicesModule extends AbstractModule {
@@ -20,8 +19,7 @@ public class ServicesModule extends AbstractModule {
   }
 
   @Provides
-  ImmutableMap<AssetType, CandleService> candleServiceMap(
-      Set<CandleService> services) {
+  ImmutableMap<AssetType, CandleService> candleServiceMap(Set<CandleService> services) {
     ImmutableMap.Builder<AssetType, CandleService> builder = ImmutableMap.builder();
     services.forEach(service -> builder.put(service.assetType(), service));
     return builder.build();

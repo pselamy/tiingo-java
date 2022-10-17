@@ -1,10 +1,9 @@
 package com.github.pselamy.tiingo.api.client;
 
+import com.github.pselamy.tiingo.api.models.AssetType;
 import com.github.pselamy.tiingo.api.services.CandleService;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
-
-import com.github.pselamy.tiingo.api.models.AssetType;
 
 public class TiingoClient {
   private final ImmutableMap<AssetType, CandleService> candleServices;
