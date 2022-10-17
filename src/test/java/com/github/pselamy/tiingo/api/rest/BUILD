@@ -6,6 +6,7 @@ java_test(
         "//:autovalue_gson",
         "//src/main/java/com/github/pselamy/tiingo/api/rest:rest_client",
         "//src/main/java/com/github/pselamy/tiingo/api/rest:rest_client_module",
+        "//src/main/java/com/github/pselamy/tiingo/api/testing:fake_http_request_transport",
         "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_http_client_google_http_client",
         "@maven//:com_google_inject_guice",
