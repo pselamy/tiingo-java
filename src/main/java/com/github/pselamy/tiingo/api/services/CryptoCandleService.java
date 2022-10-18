@@ -1,5 +1,7 @@
 package com.github.pselamy.tiingo.api.services;
 
+import static java.time.ZoneOffset.UTC;
+
 import com.github.pselamy.tiingo.api.models.ApiKey;
 import com.github.pselamy.tiingo.api.models.AssetType;
 import com.github.pselamy.tiingo.api.models.CandleResponse;
@@ -8,10 +10,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
-
 import java.time.format.DateTimeFormatter;
-
-import static java.time.ZoneOffset.UTC;
 
 class CryptoCandleService implements CandleService {
   private static final Joiner COMMA_JOINER = Joiner.on(",");
