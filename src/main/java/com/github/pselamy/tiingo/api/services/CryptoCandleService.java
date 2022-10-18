@@ -11,6 +11,8 @@ import com.google.inject.Inject;
 
 import java.time.format.DateTimeFormatter;
 
+import static java.time.ZoneOffset.UTC;
+
 class CryptoCandleService implements CandleService {
   private static final Joiner COMMA_JOINER = Joiner.on(",");
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -44,7 +46,8 @@ class CryptoCandleService implements CandleService {
     getCandlesRequest
         .endDate()
         .ifPresent(
-            endDate -> paramsBuilder.addParam("endDate", DATE_TIME_FORMATTER.format(endDate)));
+            endDate ->
+                paramsBuilder.addParam("endDate", DATE_TIME_FORMATTER.format(endDate.atZone(UTC))));
     RestClient.GetParams<ImmutableList<CandleResponse>> params = paramsBuilder.build();
     return ImmutableList.copyOf(restClient.get(params));
   }
