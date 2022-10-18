@@ -29,7 +29,7 @@ import org.junit.runner.RunWith;
 @RunWith(TestParameterInjector.class)
 public class CryptoCandleServiceTest {
   @Bind
-  private static final ApiKey API_KEY = ApiKey.create("98908a4d329d2781e2c1cdcd51cb9dbb4c090705");
+  private static final ApiKey API_KEY = ApiKey.create("YOUR-API-KEY");
 
   private HttpRequestFactory httpRequestFactory;
 
