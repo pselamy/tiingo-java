@@ -8,11 +8,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
+
 import java.time.format.DateTimeFormatter;
 
 class CryptoCandleService implements CandleService {
   private static final Joiner COMMA_JOINER = Joiner.on(",");
-  private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_INSTANT;
+  private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
   private static final String REST_PATH = "tiingo/crypto/prices";
 
