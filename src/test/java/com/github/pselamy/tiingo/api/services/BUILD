@@ -12,7 +12,6 @@ java_test(
         "//src/main/java/com/github/pselamy/tiingo/api/services:candle_service",
         "//src/main/java/com/github/pselamy/tiingo/api/services:crypto_candle_service",
         "//src/main/java/com/github/pselamy/tiingo/api/testing:fake_http_request_transport",
-        "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_http_client_google_http_client",
         "@maven//:com_google_inject_extensions_guice_testlib",
         "@maven//:com_google_inject_guice",
