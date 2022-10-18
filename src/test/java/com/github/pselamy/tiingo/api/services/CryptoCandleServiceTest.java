@@ -13,7 +13,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.LowLevelHttpResponse;
 import com.google.api.client.testing.http.MockLowLevelHttpResponse;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.testing.fieldbinder.Bind;
@@ -38,7 +37,6 @@ public class CryptoCandleServiceTest {
 
   private final Supplier<LowLevelHttpResponse> responseSupplier = () -> response;
 
-  @Inject private Gson gson;
   @Inject private CryptoCandleService service;
 
   @Before
