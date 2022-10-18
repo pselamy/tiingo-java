@@ -29,6 +29,7 @@ java_library(
 java_library(
     name = "candle_response",
     srcs = ["CandleResponse.java"],
+    visibility = ["//visibility:public"],
     deps = [
         ":candle",
         "//:autovalue",
@@ -40,6 +41,7 @@ java_library(
 java_library(
     name = "granularity",
     srcs = ["Granularity.java"],
+    visibility = ["//visibility:public"],
 )
 
 java_library(

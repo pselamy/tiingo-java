@@ -6,6 +6,7 @@ package(default_visibility = [
 java_library(
     name = "candle_service",
     srcs = ["CandleService.java"],
+    visibility = ["//visibility:public"],
     deps = [
         "//:autovalue",
         "//src/main/java/com/github/pselamy/tiingo/api/models:asset_type",
@@ -35,6 +36,7 @@ java_library(
 java_library(
     name = "services_module",
     srcs = ["ServicesModule.java"],
+    visibility = ["//visibility:public"],
     deps = [
         ":candle_service",
         ":crypto_candle_service",

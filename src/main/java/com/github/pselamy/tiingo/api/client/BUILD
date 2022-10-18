@@ -1,6 +1,7 @@
 java_library(
     name = "tiingo_client",
     srcs = ["TiingoClient.java"],
+    visibility = ["//visibility:public"],
     deps = [
         "//src/main/java/com/github/pselamy/tiingo/api/models:api_key",
         "//src/main/java/com/github/pselamy/tiingo/api/models:asset_type",
