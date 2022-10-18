@@ -36,6 +36,7 @@ java_library(
 java_library(
     name = "services_module",
     srcs = ["ServicesModule.java"],
+    visibility = ["//visibility:public"],
     deps = [
         ":candle_service",
         ":crypto_candle_service",
