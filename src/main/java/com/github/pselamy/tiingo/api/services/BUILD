@@ -6,6 +6,7 @@ package(default_visibility = [
 java_library(
     name = "candle_service",
     srcs = ["CandleService.java"],
+    visibility = ["//visibility:public"],
     deps = [
         "//:autovalue",
         "//src/main/java/com/github/pselamy/tiingo/api/models:asset_type",
@@ -14,7 +15,6 @@ java_library(
         "//src/main/java/com/github/pselamy/tiingo/api/models:granularity",
         "@maven//:com_google_guava_guava",
     ],
-    visibility = ["//visibility:public"],
 )
 
 java_library(
