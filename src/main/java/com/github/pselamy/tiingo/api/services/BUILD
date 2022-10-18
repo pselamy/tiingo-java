@@ -14,6 +14,7 @@ java_library(
         "//src/main/java/com/github/pselamy/tiingo/api/models:granularity",
         "@maven//:com_google_guava_guava",
     ],
+    visibility = ["//visibility:public"],
 )
 
 java_library(
