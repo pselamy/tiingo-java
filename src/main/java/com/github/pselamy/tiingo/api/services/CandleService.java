@@ -46,7 +46,7 @@ public interface CandleService {
       public Builder granularity(String granularity) {
         return this.granularity(Granularity.valueOf(granularity));
       }
-      
+
       public abstract GetCandlesRequest build();
     }
   }
