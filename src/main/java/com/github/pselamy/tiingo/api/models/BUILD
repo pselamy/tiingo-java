@@ -20,6 +20,7 @@ java_library(
 java_library(
     name = "candle",
     srcs = ["Candle.java"],
+    visibility = ["//visibility:public"],   
     deps = [
         "//:autovalue",
         "//:autovalue_gson",
