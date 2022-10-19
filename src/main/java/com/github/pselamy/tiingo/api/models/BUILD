@@ -14,7 +14,7 @@ java_library(
 java_library(
     name = "asset_type",
     srcs = ["AssetType.java"],
-    deps = [],
+    visibility = ["//visibility:public"],
 )
 
 java_library(
