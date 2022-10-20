@@ -19,6 +19,7 @@ public interface CandleService {
     public static Builder builder() {
       return new AutoValue_CandleService_GetCandlesRequest.Builder();
     }
+public  abstract Builder toBuilder();
 
     abstract ImmutableSortedSet<String> tickers();
 
