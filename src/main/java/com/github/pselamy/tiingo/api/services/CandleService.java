@@ -44,14 +44,12 @@ public interface CandleService {
       public Builder startDate(long startDate) {
         return this.startDate(Instant.ofEpochSecond(startDate));
       }
-      
 
       public abstract Builder endDate(Instant endDate);
 
       public Builder endDate(long endDate) {
         return this.endDate(Instant.ofEpochSecond(endDate));
       }
-      
 
       public abstract Builder granularity(Granularity granularity);
 
