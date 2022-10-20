@@ -19,7 +19,8 @@ public interface CandleService {
     public static Builder builder() {
       return new AutoValue_CandleService_GetCandlesRequest.Builder();
     }
-public  abstract Builder toBuilder();
+
+    public abstract Builder toBuilder();
 
     abstract ImmutableSortedSet<String> tickers();
 
@@ -42,14 +43,16 @@ public  abstract Builder toBuilder();
 
       public Builder startDate(long startDate) {
         return this.startDate(Instant.ofEpochSecond(startDate));
-      };
-      
+      }
+      ;
+
       public abstract Builder endDate(Instant endDate);
 
       public Builder endDate(long endDate) {
         return this.endDate(Instant.ofEpochSecond(endDate));
-      };
-      
+      }
+      ;
+
       public abstract Builder granularity(Granularity granularity);
 
       public Builder granularity(String granularity) {
