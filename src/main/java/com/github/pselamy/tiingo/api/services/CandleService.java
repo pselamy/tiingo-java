@@ -5,7 +5,7 @@ import com.github.pselamy.tiingo.api.models.CandleResponse;
 import com.github.pselamy.tiingo.api.models.Granularity;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.ImmutableSet;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public interface CandleService {
 
     public abstract Builder toBuilder();
 
-    abstract ImmutableSortedSet<String> tickers();
+    abstract ImmutableSet<String> tickers();
 
     abstract Optional<Instant> startDate();
 
@@ -32,12 +32,17 @@ public interface CandleService {
 
     @AutoValue.Builder
     public abstract static class Builder {
-      abstract ImmutableSortedSet.Builder<String> tickersBuilder();
+      abstract ImmutableSet.Builder<String> tickersBuilder();
 
       public Builder addTicker(String ticker) {
         tickersBuilder().add(ticker);
         return this;
       }
+      
+      public Builder addTickers(ImmutableSet<Ticker> tickers) {
+        tickersBuilder().addAll(tickers);
+        return this;
+      }      
 
       public abstract Builder startDate(Instant startDate);
 
