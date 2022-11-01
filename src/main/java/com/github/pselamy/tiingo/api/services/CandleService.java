@@ -40,7 +40,7 @@ public interface CandleService {
         return this;
       }
       
-      public Builder addTickers(ImmutableCollection<Ticker> tickers) {
+      public Builder addTickers(ImmutableCollection<String> tickers) {
         tickersBuilder().addAll(tickers);
         return this;
       }      
