@@ -4,6 +4,7 @@ import com.github.pselamy.tiingo.api.models.AssetType;
 import com.github.pselamy.tiingo.api.models.CandleResponse;
 import com.github.pselamy.tiingo.api.models.Granularity;
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import java.time.Instant;
@@ -39,7 +40,7 @@ public interface CandleService {
         return this;
       }
       
-      public Builder addTickers(ImmutableSet<Ticker> tickers) {
+      public Builder addTickers(ImmutableCollection<Ticker> tickers) {
         tickersBuilder().addAll(tickers);
         return this;
       }      
