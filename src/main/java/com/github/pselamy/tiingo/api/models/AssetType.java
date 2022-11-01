@@ -1,7 +1,7 @@
 package com.github.pselamy.tiingo.api.models;
 
 public enum AssetType {
-  UNSPECIFIED,  
+  UNSPECIFIED,
   CRYPTO,
   FOREX,
   STOCK
