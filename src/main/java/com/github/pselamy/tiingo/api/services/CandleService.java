@@ -39,11 +39,11 @@ public interface CandleService {
         tickersBuilder().add(ticker);
         return this;
       }
-      
+
       public Builder addTickers(ImmutableCollection<String> tickers) {
         tickersBuilder().addAll(tickers);
         return this;
-      }      
+      }
 
       public abstract Builder startDate(Instant startDate);
 
